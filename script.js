@@ -1,20 +1,54 @@
-var Movie = React.createClass({
+var App = React.createClass({
+  render: function() {
+    return (
+      React.createElement('div', {className: 'app'},
+        React.createElement(Movies, {items: movieslist}, {})
+      )
+    );
+  }
+});
+
+var Movies = React.createClass({
   propTypes: {
-    movies: React.PropTypes.array.isRequired,
+    items: React.PropTypes.array.isRequired,
   },
 
   render: function() {
-    var moviesElements = movies.map(function(movie) {
-        return React.createElement('li', {key: movie.id},
-            React.createElement('h2', {}, movie.title),
-            React.createElement('img', {src: movie.img, height: 150}),
-            React.createElement('p', {}, movie.desc)
-        );
-    });   
+    var movies = this.props.items.map(function(movie) {
+        return React.createElement(Movie, {item: movie, key: movie.id});
+    });
+
+    return (
+      React.createElement('ul', {className: 'movieList'}, movies)
+    );
+  }
+});
+
+var Movie = React.createClass({
+  propTypes: {
+    item: React.PropTypes.object.isRequired,
+  },
+
+  render: function() {
+    return (
+      React.createElement('div', {className: 'movieItem'},
+        React.createElement('img', {
+          className: 'movieImage',
+          src: this.props.item.img,
+          height: 150
+        }),
+        React.createElement('p', {className: 'movieTitle'}, 'Tytuł: ' + this.props.item.title),
+        React.createElement('p', {className: 'movieDesc'}, 'Opis: ' + this.props.item.desc)
+        
+        )
+      )
+    
   },
 });
 
-var movies = [{
+
+
+var movieslist = [{
     id: 1,
     title: 'Harry Potter',
     desc: 'Film o czarodzieju',
@@ -35,12 +69,6 @@ var movies = [{
     desc: 'Film o ojcu chrzestnym',
     img: 'https://www.barakashop.co.za/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/p/o/poster_the_godfather_.jpg'
 }];
-var element =
-    React.createElement('div', {},
-        React.createElement('h1', {}, 'Lista filmów'),
-        /*React.createElement('ul', {}, moviesElements),*/
-        React.createElement(Movie, {movies: movies})
-    );
 
-
-ReactDOM.render(element, document.getElementById('app'));
+var app = React.createElement(App);
+ReactDOM.render(app, document.getElementById('app'));
