@@ -2,7 +2,7 @@ var App = React.createClass({
   render: function() {
     return (
       React.createElement('div', {className: 'app'},
-        React.createElement(Movies, {items: movieslist}, {})
+        React.createElement(Movies, {movieList: movieslist}, {})
       )
     );
   }
@@ -10,43 +10,59 @@ var App = React.createClass({
 
 var Movies = React.createClass({
   propTypes: {
-    items: React.PropTypes.array.isRequired,
+    movieList: React.PropTypes.array.isRequired,
   },
 
   render: function() {
-    var movies = this.props.items.map(function(movie) {
-        return React.createElement(Movie, {item: movie, key: movie.id});
-    });
-
+    var movies = this.props.movieList.map(function(movie) {
     return (
-      React.createElement('ul', {className: 'movieList'}, movies)
+      React.createElement('li', {key: movie.id}, 
+      React.createElement(MovieTitle, {title: movie.title}),
+      React.createElement(MovieDesc, {desc: movie.desc}), 
+      React.createElement(MoviePoster, {img: movie.img}))
     );
+        });
+    return React.createElement('ul', {className: 'movieList'}, movies);
   }
 });
 
-var Movie = React.createClass({
+var MoviePoster = React.createClass({
   propTypes: {
-    item: React.PropTypes.object.isRequired,
+    img: React.PropTypes.string.isRequired,
   },
 
   render: function() {
     return (
       React.createElement('div', {className: 'movieItem'},
-        React.createElement('img', {
-          className: 'movieImage',
-          src: this.props.item.img,
-          height: 150
-        }),
-        React.createElement('p', {className: 'movieTitle'}, 'Tytuł: ' + this.props.item.title),
-        React.createElement('p', {className: 'movieDesc'}, 'Opis: ' + this.props.item.desc)
-        
+        React.createElement('img', { className: 'movieImage', src: this.props.img, height: 150 })
         )
-      )
-    
-  },
+      );
+    },
 });
 
+var MovieDesc = React.createClass({
+  propTypes: {
+    desc: React.PropTypes.string.isRequired,
+  },
 
+  render: function() {
+    return (
+      React.createElement('p', {className: 'movieDesc'}, 'Opis: ' + this.props.desc)
+      )
+    },
+});
+
+var MovieTitle = React.createClass({
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+  },
+
+  render: function() {
+    return (
+      React.createElement('p', {className: 'movieTitle'}, 'Tytuł: ' + this.props.title)
+      )
+    },
+});
 
 var movieslist = [{
     id: 1,
